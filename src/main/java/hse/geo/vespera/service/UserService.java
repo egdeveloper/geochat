@@ -5,7 +5,9 @@ import hse.geo.vespera.exception.UserNotFoundException;
 import hse.geo.vespera.repository.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class UserService implements IUserService{
 

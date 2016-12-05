@@ -1,0 +1,12 @@
+syntax = "proto3";
+package hse.geo.vespera.domain;
+option java_package = "hse.geo.vespera.domain.protos";
+option java_outer_classname = "UserProto";
+
+message User{
+    required int64 id = 1;
+    required string firstName = 2;
+    required string lastName = 3;
+    required string userName = 4;
+    required string password = 5;
+}
