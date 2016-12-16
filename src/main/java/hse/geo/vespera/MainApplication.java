@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = "hse.geo.vespera")
 public class MainApplication {
 
+	//Hello world!
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
 	}
