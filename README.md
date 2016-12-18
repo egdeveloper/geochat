@@ -52,4 +52,22 @@
     8. Google Protobuffers
     9. JSTS
     10. Plotly
-    11ю CartoDB (optional)
+    11. CartoDB (optional)
+    
+### 5. REST API
+
+    1. POST /user
+    2. PUT /user
+    3. DELETE /user
+    4. POST /user/auth
+    5. POST /user/{userId}/chat/new
+    6. PUT /chat
+    7. DELETE /chat
+    8. GET /user/{userId}/chats
+    9. POST /user/{userId}/chat/{chatId}
+    10. SEND* /chat/{chatId}/message/new 
+    11. SUBSCRIBE* /chat/{chatId}/message/broacast
+    12. SEND* /chat/{chatId}/note/new
+    13. SUBSCRIBE* /chat/{chatId}/note/broadcast
+    
+    * STOMP 
