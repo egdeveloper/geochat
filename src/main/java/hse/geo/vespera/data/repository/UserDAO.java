@@ -1,9 +1,9 @@
-package hse.geo.vespera.repository;
+package hse.geo.vespera.data.repository;
 
 import com.google.common.collect.ImmutableMap;
-import hse.geo.vespera.domain.User;
+import hse.geo.vespera.data.domain.User;
 import hse.geo.vespera.exception.UserNotFoundException;
-import hse.geo.vespera.mapper.UserMapper;
+import hse.geo.vespera.data.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

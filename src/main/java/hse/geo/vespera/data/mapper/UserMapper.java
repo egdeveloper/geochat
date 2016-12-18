@@ -1,6 +1,6 @@
-package hse.geo.vespera.mapper;
+package hse.geo.vespera.data.mapper;
 
-import hse.geo.vespera.domain.User;
+import hse.geo.vespera.data.domain.User;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

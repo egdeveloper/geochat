@@ -1,7 +1,7 @@
-package hse.geo.vespera.webservice;
+package hse.geo.vespera.web.service;
 
-import hse.geo.vespera.domain.GeoChat;
-import hse.geo.vespera.service.IGeoChatService;
+import hse.geo.vespera.data.domain.Chat;
+import hse.geo.vespera.data.service.IChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,21 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-public class GeoChatWebService implements IGeoChatWebService{
+public class ChatWebService implements IChatWebService {
 
     @Autowired
-    private IGeoChatService service;
+    private IChatService service;
 
     @Override
     @RequestMapping(value = "/chat", method = RequestMethod.POST)
-    public GeoChat createChat(GeoChat geoChat) {
-        return service.createChat(geoChat);
+    public Chat createChat(Chat chat) {
+        return service.createChat(chat);
     }
 
     @Override
     @RequestMapping(value = "/chat", method = RequestMethod.PUT)
-    public GeoChat updateChat(GeoChat geoChat) {
-        return service.updateChat(geoChat);
+    public Chat updateChat(Chat chat) {
+        return service.updateChat(chat);
     }
 
     @Override

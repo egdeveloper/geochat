@@ -1,6 +1,6 @@
-package hse.geo.vespera.repository;
+package hse.geo.vespera.data.repository;
 
-import hse.geo.vespera.domain.User;
+import hse.geo.vespera.data.domain.User;
 import hse.geo.vespera.exception.UserNotFoundException;
 
 public interface IUserDAO {

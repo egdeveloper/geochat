@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"hse.geo.vespera.domain", "hse.geo.vespera.repository"})
+@ComponentScan(basePackages = {"hse.geo.vespera.data.domain", "hse.geo.vespera.data.repository"})
 @EnableTransactionManagement
 public class RepositoryConfig {
 

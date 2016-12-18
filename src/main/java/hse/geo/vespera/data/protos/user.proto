@@ -1,6 +1,6 @@
 syntax = "proto3";
-package hse.geo.vespera.domain;
-option java_package = "hse.geo.vespera.domain.protos";
+package hse.geo.vespera.data.domain;
+option java_package = "hse.geo.vespera.data.domain.protos";
 option java_outer_classname = "UserProto";
 
 message User{

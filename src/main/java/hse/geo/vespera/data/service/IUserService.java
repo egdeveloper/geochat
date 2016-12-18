@@ -1,6 +1,6 @@
-package hse.geo.vespera.service;
+package hse.geo.vespera.data.service;
 
-import hse.geo.vespera.domain.User;
+import hse.geo.vespera.data.domain.User;
 import hse.geo.vespera.exception.UserNotFoundException;
 
 public interface IUserService {

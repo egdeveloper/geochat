@@ -1,8 +1,8 @@
-package hse.geo.vespera.webservice;
+package hse.geo.vespera.web.service;
 
-import hse.geo.vespera.domain.User;
+import hse.geo.vespera.data.domain.User;
 import hse.geo.vespera.exception.UserNotFoundException;
-import hse.geo.vespera.service.IUserService;
+import hse.geo.vespera.data.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

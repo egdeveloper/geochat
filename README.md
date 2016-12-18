@@ -32,5 +32,24 @@
         6. Файл index.html служит главной страницей 
         7. В нем нужно будет выполнить задачи 2.2.1, 2.2.2
         
+        Павел:
+        1. Выполнить в консоле git clone https://github.com/vespera128bit/geochw
+        2. В Idea открыть папку с загруженным проектом
+        3. Если появится сообщение "Maven: Enable Auto-Import", нажимайте на него
+        4. Попробовать запустить. Если не получится, то пишите мне. Предварительно отправьте скриншот
+        5. Добавить код регистрации и аутентификации пользователя в index.html, 
+        привязать логику к интерфейсу, разработанному Ириной в п. 7
         
-        
+### 4. Технологии
+
+    1. PostgreSQL
+    2. Postgis
+    3. Leaflet
+    4. Leaflet Draw, Drag
+    5. Terraformer WKT reader
+    6. Geohash
+    7. Spring MVC, JDBC, WebSocket
+    8. Google Protobuffers
+    9. JSTS
+    10. Plotly
+    11ю CartoDB (optional)

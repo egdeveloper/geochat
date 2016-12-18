@@ -15,7 +15,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
-@ComponentScan(basePackages = "hse.geo.vespera.controller")
+@ComponentScan(basePackages = "hse.geo.vespera.web.controller")
 public class WebConfig extends WebMvcConfigurerAdapter{
 
     private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {

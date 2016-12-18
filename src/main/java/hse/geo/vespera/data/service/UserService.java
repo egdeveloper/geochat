@@ -1,8 +1,8 @@
-package hse.geo.vespera.service;
+package hse.geo.vespera.data.service;
 
-import hse.geo.vespera.domain.User;
+import hse.geo.vespera.data.domain.User;
 import hse.geo.vespera.exception.UserNotFoundException;
-import hse.geo.vespera.repository.IUserDAO;
+import hse.geo.vespera.data.repository.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

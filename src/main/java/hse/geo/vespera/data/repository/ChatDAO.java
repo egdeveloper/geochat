@@ -1,7 +1,8 @@
-package hse.geo.vespera.repository;
+package hse.geo.vespera.data.repository;
 
 import com.google.common.collect.ImmutableMap;
-import hse.geo.vespera.domain.GeoChat;
+import hse.geo.vespera.data.domain.Chat;
+import hse.geo.vespera.data.domain.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -13,23 +14,27 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public class GeoChatDAO implements IGeoChatDAO{
+public class ChatDAO implements IChatDAO {
+
+    private final JdbcTemplate template;
 
     @Autowired
-    private JdbcTemplate template;
-
-    @Override
-    public GeoChat createChat(GeoChat geoChat) {
-        SimpleJdbcInsert insertStatement = new SimpleJdbcInsert(template);
-        insertStatement.withTableName("chats")
-                .usingGeneratedKeyColumns("chat_id");
-        Number chatId = insertStatement.executeAndReturnKey(ImmutableMap.of("name", geoChat.getName()));
-        geoChat.setId(chatId.longValue());
-        return geoChat;
+    public ChatDAO(JdbcTemplate template) {
+        this.template = template;
     }
 
     @Override
-    public GeoChat updateChat(GeoChat geoChat) {
+    public Chat createChat(Chat chat) {
+        SimpleJdbcInsert insertStatement = new SimpleJdbcInsert(template);
+        insertStatement.withTableName("chats")
+                .usingGeneratedKeyColumns("chat_id");
+        Number chatId = insertStatement.executeAndReturnKey(ImmutableMap.of("name", chat.getName()));
+        chat.setId(chatId.longValue());
+        return chat;
+    }
+
+    @Override
+    public Chat updateChat(Chat chat) {
         return null;
     }
 
@@ -46,5 +51,10 @@ public class GeoChatDAO implements IGeoChatDAO{
     @Override
     public void deleteUserFromChat(long userId, long chatId) {
 
+    }
+
+    @Override
+    public Message saveMessage(String chatId, Message message) {
+        return null;
     }
 }
