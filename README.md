@@ -42,17 +42,22 @@
         
 ### 4. Технологии
 
+    Back-End:
     1. PostgreSQL
     2. Postgis
-    3. Leaflet
-    4. Leaflet Draw, Drag
-    5. Terraformer WKT reader
-    6. Geohash
-    7. Spring MVC, JDBC, WebSocket
-    8. Google Protobuffers
-    9. JSTS
-    10. Plotly
-    11. CartoDB (optional)
+    3. Geohash
+    4. Spring MVC, JDBC, WebSocket
+    5. Google Protobuffers
+    
+    Front-End
+    1. Leaflet
+    2. Leaflet Draw, Drag
+    3. Terraformer WKT reader
+    4. JSTS
+    5. Plotly
+    6. CartoDB (optional)
+    7. Bootstrap
+    8. JQuery
     
 ### 5. REST API
 
