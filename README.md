@@ -23,6 +23,26 @@
         
 ### 3. Подробная инструкция работы
 
+![Step 1](img/Step1.png)
+
+![Step 2](img/Step2.png)
+
+![Step 3](img/Step3.png)
+
+![Step 4](img/Step4.png)
+
+![Step 5](img/Step5.png)
+
+![Step 6](img/Step6.png)
+
+![Step 7](img/Step7.png)
+
+![Step 8](img/Step8.png)
+
+![Step 9](img/Step9.png)
+
+![Step 10](img/Step10.png)
+
         Ирина:
         1. Выполнить в консоле git clone https://github.com/vespera128bit/geochw
         2. В Idea открыть папку с загруженным проектом
