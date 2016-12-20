@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserWebService implements IUserWebService{
 
+    private final IUserService userService;
+
     @Autowired
-    private IUserService userService;
+    public UserWebService(IUserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     @RequestMapping(value = "/user", method = RequestMethod.POST)

@@ -35,4 +35,9 @@ public class PageController {
     public String analytics(){
         return "analytics";
     }
+
+    @RequestMapping("/pages/chats/dashboard")
+    public String chatsDashboard(){
+        return "chats_dashboard";
+    }
 }
