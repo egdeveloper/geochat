@@ -1,4 +1,4 @@
-package hse.geo.vespera.web.service;
+package hse.geo.vespera.data.domain.temp;
 
 import lombok.Getter;
 import lombok.Setter;

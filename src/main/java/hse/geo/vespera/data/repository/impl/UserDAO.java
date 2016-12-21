@@ -1,7 +1,8 @@
-package hse.geo.vespera.data.repository;
+package hse.geo.vespera.data.repository.impl;
 
 import com.google.common.collect.ImmutableMap;
 import hse.geo.vespera.data.domain.User;
+import hse.geo.vespera.data.repository.IUserDAO;
 import hse.geo.vespera.exception.UserNotFoundException;
 import hse.geo.vespera.data.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Repository
-public class UserDAO implements IUserDAO{
+public class UserDAO implements IUserDAO {
 
     private static final String FIND_USER_BY_CREDS = "SELECT * FROM users WHERE user_name = ? AND password = ?";
+    private static final String FIND_USER_BY_ID = "SELECT * FROM users WHERE user_id = ?";
     private static final String UPDATE_USER = "UPDATE users " +
             "SET first_name = ?, last_name = ?, user_name = ?, password = ? WHERE user_id = ?";
     private static final String DELETE_USER = "DELETE FROM users WHERE user_id = ?";
@@ -62,6 +66,19 @@ public class UserDAO implements IUserDAO{
         try {
             return template.queryForObject(FIND_USER_BY_CREDS,
                     new Object[]{username, password},
+                    new UserMapper()
+            );
+        }
+        catch (EmptyResultDataAccessException e){
+            throw new UserNotFoundException();
+        }
+    }
+
+    @Override
+    public User findUserById(long userId) throws UserNotFoundException {
+        try {
+            return template.queryForObject(FIND_USER_BY_ID,
+                    new Object[]{userId},
                     new UserMapper()
             );
         }

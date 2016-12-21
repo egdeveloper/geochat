@@ -1,7 +1,8 @@
-package hse.geo.vespera.web.service;
+package hse.geo.vespera.web.service.impl;
 
 import hse.geo.vespera.data.domain.Chat;
-import hse.geo.vespera.data.service.IChatService;
+import hse.geo.vespera.data.repository.IChatDAO;
+import hse.geo.vespera.web.service.IChatWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChatWebService implements IChatWebService {
 
+    private final IChatDAO service;
+
     @Autowired
-    private IChatService service;
+    public ChatWebService(IChatDAO service) {
+        this.service = service;
+    }
 
     @Override
     @RequestMapping(value = "/user/{userId}/chat", method = RequestMethod.POST)

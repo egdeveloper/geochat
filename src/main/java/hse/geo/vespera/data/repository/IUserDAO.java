@@ -8,4 +8,5 @@ public interface IUserDAO {
     User updateUser(User user);
     void deleteUser(long userId);
     User findUserByCredentials(String username, String password) throws UserNotFoundException;
+    User findUserById(long userId) throws UserNotFoundException;
 }

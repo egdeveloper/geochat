@@ -1,15 +1,17 @@
-package hse.geo.vespera.data.repository;
+package hse.geo.vespera.data.repository.impl;
 
 import com.google.common.collect.ImmutableMap;
 import hse.geo.vespera.data.domain.Chat;
 import hse.geo.vespera.data.domain.Message;
 import hse.geo.vespera.data.domain.Note;
 import hse.geo.vespera.data.domain.User;
+import hse.geo.vespera.data.repository.IChatDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
  *
  */
 
+@Transactional
 @Repository
 public class ChatDAO implements IChatDAO {
 

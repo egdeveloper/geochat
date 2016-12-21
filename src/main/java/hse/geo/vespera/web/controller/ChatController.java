@@ -1,9 +1,8 @@
-package hse.geo.vespera.web.service;
+package hse.geo.vespera.web.controller;
 
 import hse.geo.vespera.data.domain.Message;
-import hse.geo.vespera.data.service.IChatService;
+import hse.geo.vespera.data.repository.IChatDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-public class ChatMBService {
+public class ChatController {
 
-    private final IChatService service;
+    private final IChatDAO service;
 
     @Autowired
-    public ChatMBService(IChatService service) {
+    public ChatController(IChatDAO service) {
         this.service = service;
     }
 
