@@ -15,12 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChatService implements IChatService {
 
+    private final IChatDAO rep;
+
     @Autowired
-    private IChatDAO rep;
+    public ChatService(IChatDAO rep) {
+        this.rep = rep;
+    }
 
     @Override
-    public Chat createChat(Chat chat) {
-        return rep.createChat(chat);
+    public Chat createChat(long adminId, Chat chat) {
+        return rep.createChat(adminId, chat);
     }
 
     @Override
@@ -44,7 +48,7 @@ public class ChatService implements IChatService {
     }
 
     @Override
-    public Message saveMessage(String chatId, Message message) {
-        return rep.saveMessage(chatId, message);
+    public Message saveMessage(Message message) {
+        return rep.saveMessage(message);
     }
 }

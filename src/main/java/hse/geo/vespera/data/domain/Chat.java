@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class Chat extends AbstractModel{
     private String name;
-    private User owner;
+    private String description;
 }

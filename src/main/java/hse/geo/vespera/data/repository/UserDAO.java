@@ -18,8 +18,12 @@ public class UserDAO implements IUserDAO{
             "SET first_name = ?, last_name = ?, user_name = ?, password = ? WHERE user_id = ?";
     private static final String DELETE_USER = "DELETE FROM users WHERE user_id = ?";
 
+    private final JdbcTemplate template;
+
     @Autowired
-    private JdbcTemplate template;
+    public UserDAO(JdbcTemplate template) {
+        this.template = template;
+    }
 
     @Override
     public User saveUser(User user) {

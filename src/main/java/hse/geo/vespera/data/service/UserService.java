@@ -11,8 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService implements IUserService{
 
+    private final IUserDAO userDAO;
+
     @Autowired
-    private IUserDAO userDAO;
+    public UserService(IUserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @Override
     public User saveUser(User user) {

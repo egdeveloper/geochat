@@ -3,7 +3,7 @@ package hse.geo.vespera.web.service;
 import hse.geo.vespera.data.domain.Chat;
 
 public interface IChatWebService {
-    Chat createChat(Chat chat);
+    Chat createChat(long userId, Chat chat);
 
     Chat updateChat(Chat chat);
 

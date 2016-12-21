@@ -25,7 +25,7 @@ public class ChatMBService {
 
     @MessageMapping("/chat/{chatId}/message/new")
     @SendTo("/chat/{chatId}/message/broadcast")
-    public Message sendMessage(@DestinationVariable String chatId, @RequestBody Message message){
-        return service.saveMessage(chatId, message);
+    public Message sendMessage(@RequestBody Message message){
+        return service.saveMessage(message);
     }
 }

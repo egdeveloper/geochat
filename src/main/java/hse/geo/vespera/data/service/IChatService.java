@@ -7,7 +7,7 @@ import hse.geo.vespera.data.domain.Message;
  * @author Roman Baygildin egdeveloper@mail.ru - 05.12.16
  */
 public interface IChatService {
-    Chat createChat(Chat chat);
+    Chat createChat(long adminId, Chat chat);
 
     Chat updateChat(Chat chat);
 
@@ -17,5 +17,5 @@ public interface IChatService {
 
     void deleteUserFromChat(long userId, long chatId);
 
-    Message saveMessage(String chatId, Message message);
+    Message saveMessage(Message message);
 }

@@ -19,9 +19,9 @@ public class ChatWebService implements IChatWebService {
     private IChatService service;
 
     @Override
-    @RequestMapping(value = "/chat", method = RequestMethod.POST)
-    public Chat createChat(Chat chat) {
-        return service.createChat(chat);
+    @RequestMapping(value = "/user/{userId}/chat", method = RequestMethod.POST)
+    public Chat createChat(@PathVariable long userId, Chat chat) {
+        return service.createChat(userId, chat);
     }
 
     @Override
