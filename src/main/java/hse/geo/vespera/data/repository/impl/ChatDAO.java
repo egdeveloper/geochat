@@ -56,6 +56,13 @@ public class ChatDAO implements IChatDAO {
                 "description", chat.getDescription(),
                 "admin_id", adminId));
         chat.setId(chatId.longValue());
+        insertStatement = new SimpleJdbcInsert(template);
+        insertStatement
+                .withTableName("users_chats")
+                .usingGeneratedKeyColumns("id")
+                .executeAndReturnKey(ImmutableMap.of("user_id", adminId,
+                        "chat_id", chat.getId(),
+                        "user_role", "admin"));
         return chat;
     }
 
@@ -82,7 +89,7 @@ public class ChatDAO implements IChatDAO {
         insertStatement.withTableName("users_chats")
                 .usingGeneratedKeyColumns("id");
         insertStatement.execute(ImmutableMap.of("user_id", userId,
-                "chat_id", chatId));
+                "chat_id", chatId, "user_role", "member"));
     }
 
     @Override

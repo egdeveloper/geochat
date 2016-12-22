@@ -29,18 +29,10 @@ public class MainController {
         this.chatDAO = chatDAO;
     }
 
-    /*
-    User
-     */
-
     @RequestMapping("/pages/user/personal_page")
     public String personalPage(){
         return "personal_page";
     }
-
-    /*
-    Chat
-     */
 
     @RequestMapping("/pages/chat/new")
     public String newChat(){
