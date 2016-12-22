@@ -11,8 +11,7 @@
     <link rel="stylesheet" th:href="@{/leaflet-draw/src/leaflet.draw.css}">
     <!--<script th:src="@{/leaflet-draw/src/Leaflet.draw.js}"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.7/leaflet.draw.js"></script>
-    <link rel="stylesheet" th:href="@{/leaflet-mouse/L.Control.MousePosition.css}">
-    <script th:src="@{/leaflet-mouse/L.Control.MousePosition.js}"></script>
+
     <link rel="stylesheet" th:href="@{/leaflet-mouse/Leaflet.Coordinates-0.1.5.css}">
     <script th:src="@{/leaflet-mouse/Leaflet.Coordinates-0.1.5.min.js}"></script>
 
@@ -128,7 +127,7 @@
         <div id="map"></div>
         <div id="message-send-form" class="row">
             <input id="message-input" type="text">
-            <button type="button" id="message-send-button">Отправить сообщение</button>
+            <button type="button" id="message-send-button" class="btn btn-primary">Отправить сообщение</button>
         </div>
         <div id="messages-out" >
 
@@ -169,7 +168,13 @@
         // Choose the style you like
         L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png').addTo(window.map);
 
-        L.control.mousePosition().addTo(window.map);
+        L.control.coordinates({
+			position:"topright",
+			decimals:2,
+			decimalSeperator:",",
+			labelTemplateLat:"Latitude: {y}",
+			labelTemplateLng:"Longitude: {x}"
+		}).addTo(map);
 
         L.control.coordinates({
 			position:"topright",
