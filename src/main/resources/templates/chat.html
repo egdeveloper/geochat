@@ -11,6 +11,15 @@
     <link rel="stylesheet" th:href="@{/leaflet-draw/src/leaflet.draw.css}">
     <!--<script th:src="@{/leaflet-draw/src/Leaflet.draw.js}"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.7/leaflet.draw.js"></script>
+    <link rel="stylesheet" th:href="@{/leaflet-mouse/L.Control.MousePosition.css}">
+    <script th:src="@{/leaflet-mouse/L.Control.MousePosition.js}"></script>
+    <link rel="stylesheet" th:href="@{/leaflet-mouse/Leaflet.Coordinates-0.1.5.css}">
+    <script th:src="@{/leaflet-mouse/Leaflet.Coordinates-0.1.5.min.js}"></script>
+
+    <link rel="stylesheet" th:href="@{/leaflet-zoom/L.Control.ZoomBox.css}">
+    <script th:src="@{/leaflet-zoom/L.Control.ZoomBox.min.js}"></script>
+
+
 
     <!--<script th:src="@{/leaflet.drag/Edit.Poly.Drag.js}"></script>-->
     <!--<script th:src="@{/leaflet.drag/Edit.Circle.Drag.js}"></script>-->
@@ -160,6 +169,22 @@
         // Choose the style you like
         L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png').addTo(window.map);
 
+        L.control.mousePosition().addTo(window.map);
+
+        L.control.coordinates({
+			position:"topright",
+			useDMS:true,
+			labelTemplateLat:"N {y}",
+			labelTemplateLng:"E {x}",
+			useLatLngOrder:true
+}).addTo(window.map);
+
+    var control = L.control.zoomBox({
+        modal: true,  // If false (default), it deactivates after each use.
+        position: "topleft",
+        // className: "customClass"  // Class to use to provide icon instead of Font Awesome
+});
+window.map.addControl(control);
 
         // Draw polygons
         window.drawnItems = new L.FeatureGroup();
