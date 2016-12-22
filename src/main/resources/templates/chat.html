@@ -79,9 +79,18 @@
 </nav>
 <input type="file" id="geojson-select" style="display:none" />
 <div id="map" style="position: fixed; bottom: 0px; top: 50px; right: 25%; left: 0px; background: white"></div>
-<div style="position: fixed; overflow-y: auto; top: 50px; bottom: 0px; right: 0px; width: 25%; background: white">
+<div style="position: fixed; top: 50px; bottom: 0px; right: 0px; width: 25%; background: white">
+    <form>
+        <input id="message-input" type="text">
+        <button id="message-send-button">Отправить сообщение</button>
+    </form>
+</div>
+<div id="messages-out" style="position: fixed; overflow-y: auto; top: 100px; bottom: 0px; right: 0px; width: 25%; background: white">
+
 </div>
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/sockjs/sockjs.js}"></script>
+<script th:src="@{/sockjs/stomp.js}"></script>
 <script>
     function onFileSelectClick(){
         $("#geojson-select").click();
@@ -213,8 +222,33 @@
         });
     }
 </script>
-<script>
-
+<script th:inline="javascript">
+    var context = /*[[@{'/geo-chat'}]]*/"";
+    var chatId = /*[[${chat.id}]]*/"";
+    var i = 0;
+    var stompClient = null;
+    $(document).ready(function () {
+        connect();
+    });
+    function connect() {
+        var socket = new SockJS(context);
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log("Connected: " + frame);
+            stompClient.subscribe('/chat/' + chatId + "/message/receive", function(calResult){
+                alert(calResult.body);
+                $("#message-out").appendChild(JSON.parse(calResult.body));
+            });
+        });
+    }
+    $("#message-send-button").click(function () {
+        i++;
+        stompClient.send('/geo-app/chat/' + chatId + '/message/send',
+            {},
+            JSON.stringify({
+                'body' : 'Hello world: ' + i
+            }));
+    });
 </script>
 </body>
 </html>

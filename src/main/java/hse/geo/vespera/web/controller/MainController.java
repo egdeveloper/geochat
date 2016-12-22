@@ -65,13 +65,6 @@ public class MainController {
     Chat message broker
      */
 
-    @MessageMapping("/chat/{chatId}/message/new")
-    @SendTo("/chat/{chatId}/message/broadcast")
-    @ResponseBody
-    public Message sendMessage(@RequestBody Message message){
-        return chatDAO.saveMessage(message);
-    }
-
     /*
     Analytics
      */
