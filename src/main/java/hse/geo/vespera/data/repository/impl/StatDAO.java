@@ -26,6 +26,11 @@ public class StatDAO implements IStatDAO{
             "WHERE st_contains(st_geomfromtext(?), m.geom) " +
             "GROUP BY message_date, ma.name";
 
+    private static final String FIND_REGION_MESSAGES_FREQ = "SELECT m.time::TIMESTAMP::date AS message_date, COUNT(*) AS messages_freq " +
+            "FROM messages m " +
+            "WHERE st_contains(st_geomfromtext(?), m.geom) " +
+            "GROUP BY message_date;";
+
     @Autowired
     public StatDAO(JdbcTemplate template) {
         this.template = template;
@@ -51,6 +56,15 @@ public class StatDAO implements IStatDAO{
 
     @Override
     public Map findRegionMessagesFrequency(String region) {
-        return null;
+        return template.query(FIND_REGION_MESSAGES_FREQ, new Object[]{region},
+                (ResultSetExtractor<Map<LocalDate, Long>>) rs -> {
+                    HashMap<LocalDate, Long> res = new HashMap<>();
+                    while(rs.next()){
+                        LocalDate date = rs.getDate("message_date").toLocalDate();
+                        Long freq = rs.getLong("messages_freq");
+                        res.put(date, freq);
+                    }
+                    return res;
+                });
     }
 }

@@ -82,7 +82,7 @@
 </head>
 <body style="padding-top: 70px;">
     <div class="container">
-        <nav class="navbar navbar-fixed-top navbar-inverse">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">Геочат</a>
@@ -99,16 +99,19 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Чат
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Управление чатом</a></li>
+                            <li><a th:href="@{/pages/chats}">Чаты</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Аналитика
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Просмотреть аналитику</a></li>
+                            <li><a th:href="@{/pages/analytics}">Просмотреть аналитику</a></li>
                         </ul>
                     </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a th:href="@{/pages/main/action/logout}">Выйти</a></li>
                 </ul>
             </div>
         </nav>
@@ -125,6 +128,7 @@
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{/sockjs/sockjs.js}"></script>
 <script th:src="@{/sockjs/stomp.js}"></script>
+<script th:src="@{/moment/moment.js}"></script>
 <script>
     function onFileSelectClick(){
         $("#geojson-select").click();
@@ -142,7 +146,6 @@
         // Read in the image file as a data URL.
         reader.readAsText(file);
     }
-
 
         document.getElementById("geojson-select").addEventListener("change", handleFileSelect, false);
         // Choose center and zoom level
@@ -259,6 +262,8 @@
     var context = /*[[@{'/geo-chat'}]]*/"";
     var chatId = /*[[${chat.id}]]*/"";
     var userId = /*[[${user.id}]]*/0;
+    var lname = /*[[${user.lastName}]]*/"";
+    var fname = /*[[${user.firstName}]]*/"";
     var i = 0;
     var chatClient = null;
     $(document).ready(function () {
@@ -268,10 +273,11 @@
         var socket = new SockJS(context);
         chatClient = Stomp.over(socket);
         chatClient.connect({}, function(frame) {
-            chatClient.subscribe('/chat/message/receive', function(message){
-                var messageStr = "<i>" + JSON.parse(message.body).body + "</i><br/>";
-                var messageOut = document.getElementById("messages-out");
-                messageOut.innerHTML = messageStr;
+            chatClient.subscribe('/chat/message/receive', function(message_frame){
+                var message = JSON.parse(message_frame.body);
+                var headerStr = "<b>" + message.senderName + "</b><br/>";
+                var messageStr = "<i>" + message.body + "</i><br/>";
+                $("#messages-out").append(headerStr + messageStr);
             });
         });
     }
@@ -287,10 +293,11 @@
                     {},
                     JSON.stringify({
                         'body' : body,
-                        'time': time,
+                        'time': (new Date()).toISOString(),
                         'geom': geom,
-                        'sender_id': 1,
-                        'chat_id': 1
+                        'senderId': 1,
+                        'chatId': 1,
+                        'senderName' : lname + ' ' + fname
                     }));
             });
         }

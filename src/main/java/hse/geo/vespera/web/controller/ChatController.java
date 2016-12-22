@@ -27,7 +27,7 @@ public class ChatController {
     @MessageMapping("/chat/{chatId}/message/send")
 //    @SendTo("/chat/{chatId}/message/message/receive")
     public void sendMessage(@RequestBody Message message){
-        message = chatDAO.saveMessage(message);
+//        message = chatDAO.saveMessage(message);
         template.convertAndSend("/chat/message/receive",
                 message);
     }
