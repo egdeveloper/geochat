@@ -5,6 +5,7 @@ import hse.geo.vespera.data.domain.Chat;
 import hse.geo.vespera.data.domain.Message;
 import hse.geo.vespera.data.domain.Note;
 import hse.geo.vespera.data.domain.User;
+import hse.geo.vespera.data.mapper.ChatMapper;
 import hse.geo.vespera.data.repository.IChatDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Roman Baygildin egdeveloper@mail.ru - 05.12.16
@@ -32,11 +35,12 @@ public class ChatDAO implements IChatDAO {
     private static final String DELETE_USER_FROM_CHAT = "DELETE FROM users_chats WHERE user_id = ? AND chat_id = ?";
     private static final String SAVE_MESSAGE = "INSERT INTO messages (body, time, geom, chat_id, sender_id) VALUES (?, ?, ST_GeomFromText('?'), ?, ?)";
     private static final String FIND_MESSAGES = "SELECT * FROM FIND_MESSAGES(?)";
-    private static final String FIND_CHATS = "SELECT c.*, uc.user_role FROM users u, users_chats uc, chats c " +
+    private static final String FIND_CHATS = "SELECT c.chat_id AS chat_id, c.name AS name, c.description AS description FROM users u, users_chats uc, chats c " +
             "WHERE u.user_id = uc.user_id AND uc.chat_id = c.chat_id AND u.user_id = ?";
     private static final String FIND_MEMBERS = "SELECT u.* FROM users u, users_chats uc, chats c " +
             "WHERE u.user_id = uc.user_id AND uc.chat_id = c.chat_id AND c.chat_id = ?";
     private static final String FIND_NOTES = "SELECT * FROM notes WHERE chat_id = ?";
+    private static final String FIND_CHAT = "SELECT * FROM chats WHERE chat_id = ?";
 
     @Autowired
     public ChatDAO(JdbcTemplate template) {
@@ -116,9 +120,36 @@ public class ChatDAO implements IChatDAO {
     @Override
     public List<Chat> findChats(long userId) {
         try {
-            return template.queryForList(FIND_CHATS,
+            List<Chat> chats = template.query(FIND_CHATS,
                     new Object[]{userId},
-                    Chat.class);
+                    new ChatMapper());
+//            for(Map map : template.queryForList(FIND_CHATS, new Object[]{userId})){
+//                Chat chat = new Chat();
+//                chat.setId((Long) map.get("chat_id"));
+//                chat.setName((String) map.get("name"));
+//                chat.setDescription((String) map.get("description"));
+//                chats.add(chat);
+//            }
+            return chats;
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
+    }
+
+    @Override
+    public Chat findChat(long chatId) {
+        try {
+            return template.queryForObject(FIND_CHAT,
+                    new Object[]{chatId},
+                    new ChatMapper());
+//            for(Map map : template.queryForList(FIND_CHATS, new Object[]{userId})){
+//                Chat chat = new Chat();
+//                chat.setId((Long) map.get("chat_id"));
+//                chat.setName((String) map.get("name"));
+//                chat.setDescription((String) map.get("description"));
+//                chats.add(chat);
+//            }
         }
         catch (EmptyResultDataAccessException e){
             return null;

@@ -5,6 +5,13 @@ import lombok.Setter;
 
 public class User extends AbstractModel{
 
+    public User(){
+        firstName = "";
+        lastName = "";
+        userName = "";
+        password = "";
+    }
+
     @Getter
     @Setter
     private String firstName;

@@ -16,6 +16,7 @@ public interface IChatDAO {
     Message saveMessage(Message message);
     List<Message> findMessages(long chatId);
     List<Chat> findChats(long userId);
+    Chat findChat(long chatId);
     List<User> findMembers(long chatId);
     List<Note> findNotes(long chatId);
 }

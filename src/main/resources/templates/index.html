@@ -265,14 +265,14 @@
 
                 <div class="card__content tab-content">
                     <div role="tabpanel" class="tab-pane active" id="login">
-                        <form>
+                        <form th:action="@{/pages/index/action/user/auth}" th:object="${credentials}" method="post">
                             <div class="form-group">
                                 <label for="log-login">Логин</label>
-                                <input type="text" class="form-control" id="log-login" placeholder="Введите логин">
+                                <input type="text" class="form-control" id="log-login" th:field="*{userName}" placeholder="Введите логин">
                             </div>
                             <div class="form-group">
                                 <label for="pass-login">Пароль</label>
-                                <input type="password" class="form-control" id="pass-login" placeholder="Введите пароль">
+                                <input type="password" class="form-control" id="pass-login" th:field="*{password}" placeholder="Введите пароль">
                             </div>
                             <div class="checkbox">
                                 <label>
@@ -283,40 +283,23 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="registration">
-                        <form>
-
+                        <form th:action="@{/pages/index/action/user/new}" th:object="${newUser}" method="post">
                             <div class="form-group">
-                                <label for="log-reg">Логин</label>
-                                <input type="text" class="form-control" id="log-login" placeholder="Введите логин">
+                                <label for="firstName-reg">Имя</label>
+                                <input type="text" class="form-control" id="firstName-reg" th:field="*{firstName}" placeholder="Введите логин">
                             </div>
-
-
+                            <div class="form-group">
+                                <label for="lastName-reg">Фамилия</label>
+                                <input type="text" class="form-control" id="lastName-reg" th:field="*{lastName}" placeholder="Введите логин">
+                            </div>
+                            <div class="form-group">
+                                <label for="userName-reg">Логин</label>
+                                <input type="text" class="form-control" id="userName-reg" th:field="*{userName}" placeholder="Введите логин">
+                            </div>
                             <div class="form-group">
                                 <label for="pass-reg">Пароль</label>
-                                <input type="password" class="form-control" id="pass-login" placeholder="Введите пароль">
+                                <input type="password" class="form-control" id="pass-reg" th:field="*{password}" placeholder="Введите пароль">
                             </div>
-
-                            <div class="form-group">
-                                <label for="email-reg">Почта</label>
-                                <input type="email" class="form-control" id="email-login" placeholder="Введите почту">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="adress-reg">Адрес проживания</label>
-                                <input type="text" class="form-control" id="adress-login" placeholder="Введите адрес проживания">
-                            </div>
-
-                            <label>Пол</label>
-                            <div class="form-group">
-
-                                <label class="radio-inline">
-                                    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Мужчина
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> Женщина
-                                </label>
-                            </div>
-
                             <button type="submit" class="btn btn-primary btn-block btn-lg">Зарегистрироваться</button>
                         </form>
                     </div>

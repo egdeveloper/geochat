@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Геочат</title>
+    <title th:text="${chat.name}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" th:href="@{leaflet/leaflet.css}">
+    <link rel="stylesheet" th:href="@{/leaflet/leaflet.css}">
     <script th:src="@{/leaflet/leaflet.js}"></script>
     <script th:src="@{/jquery/jquery.js}"></script>
     <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
@@ -78,7 +78,9 @@
     </div>
 </nav>
 <input type="file" id="geojson-select" style="display:none" />
-<div id="map"></div>
+<div id="map" style="position: fixed; bottom: 0px; top: 50px; right: 25%; left: 0px; background: white"></div>
+<div style="position: fixed; overflow-y: auto; top: 50px; bottom: 0px; right: 0px; width: 25%; background: white">
+</div>
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 <script>
     function onFileSelectClick(){
@@ -210,6 +212,9 @@
             });
         });
     }
+</script>
+<script>
+
 </script>
 </body>
 </html>
