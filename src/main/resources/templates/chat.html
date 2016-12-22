@@ -44,48 +44,79 @@
         .navbar {
             margin-bottom: 0;
         }
+
+        #messages-out{
+            position: fixed;
+            overflow-y: auto;
+            top: 100px;
+            bottom: 0px;
+            right: 0px;
+            width: 25%;
+            background: white
+        }
+
+        #message-send-form{
+            position: fixed;
+            top: 50px;
+            bottom: 0px;
+            right: 0px;
+            width: 25%;
+            background: white
+        }
+
+        #map{
+            position: fixed;
+            bottom: 0px;
+            top: 50px;
+            right: 25%;
+            left: 0px;
+            background: white
+        }
+
     </style>
 </head>
-<body>
-<nav class="navbar navbar-static-top navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Геочат</a>
+<body style="padding-top: 70px;">
+    <div class="container">
+        <nav class="navbar navbar-fixed-top navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Геочат</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Личная страница
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" onclick="onFileSelectClick();">Открыть</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Чат
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Управление чатом</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Аналитика
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Просмотреть аналитику</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <input type="file" id="geojson-select" style="display:none" />
+        <div id="map"></div>
+        <div id="message-send-form" class="row">
+            <input id="message-input" type="text">
+            <button type="button" id="message-send-button">Отправить сообщение</button>
         </div>
-        <ul class="nav navbar-nav">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Личная страница
-                    <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#" onclick="onFileSelectClick();">Открыть</a></li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Чат
-                    <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Управление чатом</a></li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Аналитика
-                    <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Просмотреть аналитику</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</nav>
-<input type="file" id="geojson-select" style="display:none" />
-<div id="map" style="position: fixed; bottom: 0px; top: 50px; right: 25%; left: 0px; background: white"></div>
-<div style="position: fixed; top: 50px; bottom: 0px; right: 0px; width: 25%; background: white">
-    <input id="message-input" type="text">
-    <button type="button" id="message-send-button">Отправить сообщение</button>
-</div>
-<div id="messages-out" style="position: fixed; overflow-y: auto; top: 100px; bottom: 0px; right: 0px; width: 25%; background: white">
+        <div id="messages-out" >
 
-</div>
+        </div>
+    </div>
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{/sockjs/sockjs.js}"></script>
 <script th:src="@{/sockjs/stomp.js}"></script>
@@ -241,16 +272,27 @@
         });
     }
     $("#message-send-button").click(function () {
-        i++;
-        chatClient.send('/geo-app/chat/' + chatId + '/message/send',
-            {},
-            JSON.stringify({
-                'body' : $("#message-input").val(),
-                'time': null,
-                'geom': "POINT(12.45 56.5)",
-                'sender_id': 1,
-                'chat_id': 1
-            }));
+        if(navigator){
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                var time = Date.now();
+                var body = $("#message-input").val();
+                var lat = pos.coords.latitude;
+                var lon = pos.coords.longitude;
+                var geom = "POINT(" + lat + " " + lon + ")";
+                chatClient.send('/geo-app/chat/' + chatId + '/message/send',
+                    {},
+                    JSON.stringify({
+                        'body' : body,
+                        'time': time,
+                        'geom': geom,
+                        'sender_id': 1,
+                        'chat_id': 1
+                    }));
+            });
+        }
+        else{
+            alert("Ваше устройство не поддерживает определение местоположения!");
+        }
     });
 </script>
 </body>
