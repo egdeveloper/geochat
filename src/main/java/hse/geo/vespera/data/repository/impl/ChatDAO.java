@@ -6,6 +6,7 @@ import hse.geo.vespera.data.domain.Message;
 import hse.geo.vespera.data.domain.Note;
 import hse.geo.vespera.data.domain.User;
 import hse.geo.vespera.data.mapper.ChatMapper;
+import hse.geo.vespera.data.mapper.MessageMapper;
 import hse.geo.vespera.data.repository.IChatDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -33,8 +34,12 @@ public class ChatDAO implements IChatDAO {
     private static final String UPDATE_CHAT = "UPDATE chats SET name = ?, description = ? WHERE chat_id = ?";
     private static final String DELETE_CHAT = "DELETE FROM chats WHERE chat_id = ?";
     private static final String DELETE_USER_FROM_CHAT = "DELETE FROM users_chats WHERE user_id = ? AND chat_id = ?";
-    private static final String SAVE_MESSAGE = "INSERT INTO messages (body, time, geom, chat_id, sender_id) VALUES (?, ?, ST_GeomFromText('?'), ?, ?)";
-    private static final String FIND_MESSAGES = "SELECT * FROM FIND_MESSAGES(?)";
+    private static final String SAVE_MESSAGE = "INSERT INTO messages (body, time, geom, chat_id, sender_id) VALUES (?, ?, ST_GeomFromText(?), ?, ?)";
+    private static final String FIND_MESSAGES = "SELECT m.message_id message_id, m.body body, m.time AS message_time, st_astext(m.geom) geom, m.sender_id sender_id, m.chat_id chat_id, last_name || ' ' || first_name AS sender_name " +
+            "FROM messages m INNER JOIN chats USING (chat_id) " +
+            "INNER JOIN users ON user_id = sender_id " +
+            "WHERE chat_id = ?" +
+            "ORDER BY message_time ASC";
     private static final String FIND_CHATS = "SELECT c.chat_id AS chat_id, c.name AS name, c.description AS description FROM users u, users_chats uc, chats c " +
             "WHERE u.user_id = uc.user_id AND uc.chat_id = c.chat_id AND u.user_id = ?";
     private static final String FIND_MEMBERS = "SELECT u.* FROM users u, users_chats uc, chats c " +
@@ -115,12 +120,20 @@ public class ChatDAO implements IChatDAO {
     @Override
     public List<Message> findMessages(long chatId) {
         try {
-            return template.queryForList(FIND_MESSAGES,
+            List<Message> messages = template.query(FIND_MESSAGES,
                     new Object[]{chatId},
-                    Message.class);
+                    new MessageMapper());
+//            for(Map map : template.queryForList(FIND_CHATS, new Object[]{userId})){
+//                Chat chat = new Chat();
+//                chat.setId((Long) map.get("chat_id"));
+//                chat.setName((String) map.get("name"));
+//                chat.setDescription((String) map.get("description"));
+//                chats.add(chat);
+//            }
+            return messages;
         }
         catch (EmptyResultDataAccessException e){
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -140,7 +153,7 @@ public class ChatDAO implements IChatDAO {
             return chats;
         }
         catch (EmptyResultDataAccessException e){
-            return null;
+            return new ArrayList<>();
         }
     }
 

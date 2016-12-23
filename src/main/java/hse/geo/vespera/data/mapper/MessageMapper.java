@@ -21,6 +21,7 @@ public class MessageMapper implements RowMapper<Message> {
         message.setGeom(rs.getString("geom"));
         message.setChatId(rs.getLong("chat_id"));
         message.setSenderId(rs.getLong("sender_id"));
+        message.setSenderName(rs.getString("sender_name"));
         return message;
     }
 }

@@ -62,7 +62,8 @@ public class MainController {
      */
 
     @RequestMapping("/pages/analytics")
-    public String analytics(){
+    public String analytics(@RequestParam String region, Model model){
+        model.addAttribute("region", region);
         return "analytics";
     }
 

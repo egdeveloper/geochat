@@ -11,17 +11,10 @@
     <link rel="stylesheet" th:href="@{/leaflet-draw/src/leaflet.draw.css}">
     <!--<script th:src="@{/leaflet-draw/src/Leaflet.draw.js}"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.7/leaflet.draw.js"></script>
-
-    <!--<script th:src="@{/leaflet.drag/Edit.Poly.Drag.js}"></script>-->
-    <!--<script th:src="@{/leaflet.drag/Edit.Circle.Drag.js}"></script>-->
-    <!--<script th:src="@{/leaflet.drag/Edit.SimpleShape.Drag.js}"></script>-->
-    <!--<script th:src="@{/leaflet.drag/Edit.Rectangle.Drag.js}"></script>-->
-    <!-- Дополнительная библиотека для функции перемещения-->
     <script th:src="@{/leaflet-drag/L.Path.Drag.js}"></script>
     <script th:src="@{/leaflet-drag/Leaflet.draw.drag.js}"></script>
-
     <script th:src="@{/terraformer/terraformer.js}"></script>
-    <script th:src="@{/terraformer/terraformer-wkt.js}"></script>
+    <script th:src="@{/terraformer/terraformer-wkt-parser.js}"></script>
     <!--<script th:src="@{/hw_res/jsts.js}"></script>-->
     <style>
         html, body {
@@ -53,7 +46,7 @@
         #messages-out{
             position: fixed;
             overflow-y: auto;
-            top: 100px;
+            top: 120px;
             bottom: 0px;
             right: 0px;
             width: 25%;
@@ -118,10 +111,10 @@
         <input type="file" id="geojson-select" style="display:none" />
         <div id="map"></div>
         <div id="message-send-form" class="row">
-            <input id="message-input" type="text">
-            <button type="button" id="message-send-button">Отправить сообщение</button>
+            <input id="message-input" type="text" class="form-control">
+            <button type="button" id="message-send-button" class="btn btn-secondary btn-success">Отправить сообщение</button>
         </div>
-        <div id="messages-out" >
+        <div id="messages-out" class="row">
 
         </div>
     </div>
@@ -129,7 +122,8 @@
 <script th:src="@{/sockjs/sockjs.js}"></script>
 <script th:src="@{/sockjs/stomp.js}"></script>
 <script th:src="@{/moment/moment.js}"></script>
-<script>
+<script th:inline="javascript">
+    var mainContext = /*[[@{'/'}]]*/"";
     function onFileSelectClick(){
         $("#geojson-select").click();
     }
@@ -149,16 +143,24 @@
 
         document.getElementById("geojson-select").addEventListener("change", handleFileSelect, false);
         // Choose center and zoom level
-        var options = {
-            center: [41.8369, -87.6847], // Chicago
-            zoom: 5
+
+        window.options = {
+            zoom: 5,
+            center: [55.42, 36.58]
         };
 
+        if(navigator){
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                window.options.center = [pos.coords.latitude, pos.coords.longitude];
+            });
+        }
+
+
         // Instantiate map on specified DOM element
-        window.map = new L.Map('map', options);
+        window.map = new L.Map('map', window.options);
 
         // Choose the style you like
-        L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png').addTo(window.map);
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(window.map);
 
 
         // Draw polygons
@@ -197,56 +199,17 @@
         window.map.addControl(drawControl);
 
         var updateFunction = function (currentLayer) {
-//            console.log("Current layer: ");
-//            var cwkt = Terraformer.WKT.convert(currentLayer.toGeoJSON().geometry);
-//            console.log(cwkt);
-//            var reader = new jsts.io.WKTReader();
-//            var curObj = reader.read(cwkt);
-//            window.drawnItems.eachLayer(function(otherLayer){
-//                var geojson = otherLayer.toGeoJSON();
-//                var owkt = Terraformer.WKT.convert(geojson.geometry);
-//                var othObj = reader.read(owkt);
-//                window.console.log(owkt);
-//                window.console.log("This layer intersects with current one:");
-//                window.console.log(curObj.intersects(othObj));
-//                window.console.log("This layer covers current one");
-//                window.console.log(curObj.coveredBy(othObj));
-//                window.console.log("This layer disjoint current one");
-//                window.console.log(curObj.disjoint(othObj));
-//                window.console.log("This layer crosses current one");
-//                window.console.log(curObj.crosses(othObj));
-//            });
         };
 
         window.map.on('draw:created', function (e) {
             var layer = e.layer;
-//            var ceh = (function(currentLayer){
-//                return function (e){
-//                    console.log(currentLayer);
-//                    console.log("================================================");
-//                    console.log("Current layer: ");
-//                    var cwkt = Terraformer.WKT.convert(currentLayer.toGeoJSON().geometry);
-//                    console.log(cwkt);
-//                    var reader = new jsts.io.WKTReader();
-//                    var curObj = reader.read(cwkt);
-//                    window.drawnItems.eachLayer(function(otherLayer){
-//                        var geojson = otherLayer.toGeoJSON();
-//                        var owkt = Terraformer.WKT.convert(geojson.geometry);
-//                        var othObj = reader.read(owkt);
-//                        window.console.log(owkt);
-//                        window.console.log("This layer intersects with current one:");
-//                        window.console.log(curObj.intersects(othObj));
-//                        window.console.log("This layer covers current one");
-//                        window.console.log(curObj.coveredBy(othObj));
-//                        window.console.log("This layer disjoint current one");
-//                        window.console.log(curObj.disjoint(othObj));
-//                        window.console.log("This layer crosses current one");
-//                        window.console.log(curObj.crosses(othObj));
-//                    });
-//                    console.log("================================================");
-//                }
-//            })(layer);
-//            layer.on("click", ceh);
+            var ceh = (function(currentLayer){
+                return function (e){
+                    var cwkt = Terraformer.WKT.convert(currentLayer.toGeoJSON().geometry);
+                    window.location = mainContext + "pages/analytics?region=" + cwkt;
+                }
+            })(layer);
+            layer.on('click', ceh);
             window.drawnItems.addLayer(layer);
             updateFunction(layer);
         });
@@ -269,14 +232,34 @@
     $(document).ready(function () {
         connect();
     });
+
+    $(document).ready(function () {
+        $.getJSON(mainContext + "chat/" + chatId + "/messages", function (messages) {
+            messages.forEach(function (m, i, a) {
+                var message = m.body;
+                var headerStr = "<b>" + m.senderName + "</b><br>";
+                var messageStr = "<i>" + message + "</i><br/>";
+                var geom = Terraformer.WKT.parse(m.geom);
+                L.marker([geom.coordinates[0], geom.coordinates[1]])
+                    .bindPopup(message.senderName + ':<br/>' + message)
+                    .addTo(drawnItems);
+                $("#messages-out").append(headerStr + messageStr);
+            });
+        });
+    });
+
     function connect() {
         var socket = new SockJS(context);
         chatClient = Stomp.over(socket);
         chatClient.connect({}, function(frame) {
             chatClient.subscribe('/chat/message/receive', function(message_frame){
                 var message = JSON.parse(message_frame.body);
-                var headerStr = "<b>" + message.senderName + "</b><br/>";
+                var headerStr = "<b>" + message.senderName + "</b><br>";
                 var messageStr = "<i>" + message.body + "</i><br/>";
+                var geom = Terraformer.WKT.parse(message.geom);
+                L.marker([geom.coordinates[0], geom.coordinates[1]])
+                    .bindPopup(message.senderName + ':<br/>' + message.body)
+                    .addTo(drawnItems);
                 $("#messages-out").append(headerStr + messageStr);
             });
         });
@@ -306,8 +289,6 @@
         }
     });
 </script>
-
-
 
 <script th:inline="javascript">
 

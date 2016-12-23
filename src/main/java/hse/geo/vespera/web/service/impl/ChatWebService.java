@@ -1,6 +1,7 @@
 package hse.geo.vespera.web.service.impl;
 
 import hse.geo.vespera.data.domain.Chat;
+import hse.geo.vespera.data.domain.Message;
 import hse.geo.vespera.data.repository.IChatDAO;
 import hse.geo.vespera.web.service.IChatWebService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author Roman Baygildin (egdeveloper@mail.ru) [03.12.16]
@@ -51,5 +54,11 @@ public class ChatWebService implements IChatWebService {
     @RequestMapping(value = "/chat/{chatId}/user/{userId}", method = RequestMethod.DELETE)
     public void deleteUserFromChat(@PathVariable long userId, @PathVariable long chatId) {
         service.deleteUserFromChat(userId, chatId);
+    }
+
+    @Override
+    @RequestMapping(value = "/chat/{chatId}/messages")
+    public List<Message> chatMessages(@PathVariable long chatId) {
+        return service.findMessages(chatId);
     }
 }

@@ -1,10 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <title>Геочат</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script th:src="@{/jquery/jquery.js}"></script>
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap-theme.min.css}">
+    <script th:src="@{/plotly/plotly.js}"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        #map {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
 
+        button {
+            margin-right: 10px;
+            font-family: "Proxima Nova W01", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background: transparent;
+        }
+
+        p {
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+        .navbar {
+            margin-bottom: 0;
+        }
+
+        .panel{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body style="padding-top: 70px;">
+<div class="container">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Геочат</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Личная страница
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="onFileSelectClick();">Открыть</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Чат
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a th:href="@{/pages/chats}">Чаты</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Аналитика
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a th:href="@{/pages/analytics}">Просмотреть аналитику</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a th:href="@{/pages/main/action/logout}">Выйти</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col-md-5">
+            <input id="region-input" class="form-control">
+        </div>
+        <div class="col-md-5">
+            <button id="get-analytics-btn" class="btn btn-success">Получить аналитику</button>
+        </div>
+    </div>
+    <div class="row">
+        <div id="analytics-char"></div>
+    </div>
+</div>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script th:inline="javascript">
+    var context = /*[[@{'/'}]]*/"";
+    var region = /*[[${region}]]*/0;
+    $(document).ready(function () {
+       $.getJSON(context + "stat-service/region/statistics?region=" + region, function (data) {
+           console.log(data);
+           $("#analytics-char").empty();
+           Object.keys(data).forEach(function (k, i, a) {
+              var panel = "<div class='panel panel-default' id='panel-" + i + "'></div>";
+              var panelHead = "<div class='panel-heading'>" + k + "</div>";
+              var panelBody = "<div class='panel-body' id='panel-body-" + i + "'></div>";
+              var chart = "<div id='chart-" + i + "'></div>";
+              $("#analytics-char").append(panel);
+              $("#panel-" + i).append(panelHead);
+              $("#panel-" + i).append(panelBody);
+              $("#panel-body-" + i).append(chart);
+              var timePoints = Object.keys(data[k]);
+              var valuePoints = Object.keys(data[k]).map(function (time) {
+                  return data[k][time];
+              });
+              Plotly.newPlot("chart-" + i, [
+                  {
+                      x: timePoints,
+                      y: valuePoints,
+                      type: 'scatter'
+                  }
+              ]);
+           });
+       });
+    });
+</script>
 </body>
 </html>
